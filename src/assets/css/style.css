@@ -1,0 +1,73 @@
+/* Custom styles */
+
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.sidebar {
+    position: sticky;
+    top: 0;
+    padding-top: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #f8f9fa;
+}
+
+.sidebar .nav-link.active {
+    color: #fff;
+    background-color: #0d6efd;
+}
+
+.sidebar-heading {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+/* Order status badges */
+.badge.bg-warning {
+    color: #212529;
+}
+
+/* Form styles */
+.form-label {
+    font-weight: 500;
+}
+
+/* Footer styles */
+footer {
+}
+
+@media (max-width: 768px) {
+    .card-img-top {
+        height: 160px;
+    }
+}
