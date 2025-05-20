@@ -40,7 +40,7 @@
                                 <?php foreach ($cart_items as $item): ?>
                                     <tr>
                                         <td>
-                                            <a href="/products/detail?id=<?php echo $item['id']; ?>"><?php echo $item['name']; ?></a>
+                                            <a style="text-decoration: none" href="/products/detail?id=<?php echo $item['id']; ?>"><?php echo $item['name']; ?></a>
                                         </td>
                                         <td>
                                             <img src="<?php echo !empty($item['image']) ? $item['image'] : 'https://via.placeholder.com/80x80?text=No+Image'; ?>" alt="<?php echo $item['name']; ?>" class="img-thumbnail" width="80">

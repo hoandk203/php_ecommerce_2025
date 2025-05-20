@@ -66,6 +66,8 @@ body {
 footer {
 }
 
+
+
 @media (max-width: 768px) {
     .card-img-top {
         height: 160px;

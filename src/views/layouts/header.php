@@ -44,7 +44,7 @@
                             <i class="fas fa-shopping-cart"></i> Giỏ hàng
                             <?php
                             if (isset($_SESSION['user']['id'])) {
-                                require_once __DIR__ . '/../../config/database.php';
+                                require_once __DIR__ . '/../../config/Database.php';
                                 require_once __DIR__ . '/../../models/Cart.php';
 
                                 $database = new Database();

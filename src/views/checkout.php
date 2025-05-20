@@ -19,7 +19,7 @@
                     <h4 class="mb-0">Thông tin đặt hàng</h4>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="/checkout">
+                    <form method="POST" action="/checkout" id="checkout-form">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="name" class="form-label">Họ tên</label>
@@ -40,19 +40,37 @@
                                 <input type="text" class="form-control" id="address" name="address" required>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Phương thức thanh toán</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment_method" id="payment-cod" value="cod" checked>
-                                <label class="form-check-label" for="payment-cod">
-                                    Thanh toán khi nhận hàng (COD)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment_method" id="payment-vnpay" value="vnpay">
-                                <label class="form-check-label" for="payment-vnpay">
-                                    Thanh toán VNPAY
-                                </label>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Phương thức thanh toán</label>
+                            <div class="payment-methods">
+                                <div class="payment-method-item mb-3 border rounded p-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment_method" id="payment-cod" value="cod" checked>
+                                        <label class="form-check-label d-flex align-items-center" for="payment-cod">
+                                            <span class="me-2"><i class="fas fa-money-bill-wave text-success"></i></span>
+                                            <span>
+                                                <strong>Thanh toán khi nhận hàng (COD)</strong>
+                                                <br>
+                                                <small class="text-muted">Bạn sẽ thanh toán bằng tiền mặt khi nhận hàng</small>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="payment-method-item mb-3 border rounded p-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="payment_method" id="payment-vnpay" value="vnpay">
+                                        <label class="form-check-label d-flex align-items-center" for="payment-vnpay">
+                                            <span class="me-2">
+                                                <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Icon-VNPAY-QR.png" alt="VNPAY" width="32" height="32">
+                                            </span>
+                                            <span>
+                                                <strong>Thanh toán VNPAY</strong>
+                                                <br>
+                                                <small class="text-muted">Thanh toán trực tuyến qua cổng VNPAY (ATM/Visa/MasterCard/JCB/QR Code)</small>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -94,6 +112,24 @@
                         </tr>
                         </tfoot>
                     </table>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Thông tin thanh toán VNPAY</h5>
+                </div>
+                <div class="card-body">
+                    <p class="small">Khi chọn phương thức thanh toán VNPAY:</p>
+                    <ol class="small ps-3">
+                        <li>Bạn sẽ được chuyển đến cổng thanh toán an toàn của VNPAY</li>
+                        <li>Hoàn tất thanh toán theo hướng dẫn</li>
+                        <li>Đơn hàng chỉ được tạo khi thanh toán thành công</li>
+                        <li>Bạn sẽ được chuyển về trang đơn hàng sau khi hoàn tất</li>
+                    </ol>
+                    <div class="text-center mt-2">
+                        <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-VNPAY-QR.png" alt="VNPAY" class="img-fluid" style="max-width: 150px;">
+                    </div>
                 </div>
             </div>
         </div>

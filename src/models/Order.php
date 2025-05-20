@@ -113,5 +113,21 @@ class Order {
         }
         return false;
     }
+
+    // Xóa đơn hàng
+    public function delete() {
+        // Xóa các order items trước
+        $query = "DELETE FROM order_items WHERE order_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id);
+        $stmt->execute();
+
+        // Sau đó xóa order
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id);
+
+        return $stmt->execute();
+    }
 }
 ?>

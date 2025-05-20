@@ -80,6 +80,13 @@ switch ($path) {
         $controller = new OrderController();
         $controller->checkout();
         break;
+        
+    // Xử lý kết quả thanh toán từ VNPAY
+    case '/vnpay-return':
+        require_once 'controllers/OrderController.php';
+        $controller = new OrderController();
+        $controller->vnpayReturn();
+        break;
 
     // Danh sách đơn hàng của người dùng
     case '/orders':
@@ -228,6 +235,19 @@ switch ($path) {
         require_once 'controllers/AdminController.php';
         $controller = new AdminController();
         $controller->updateOrderStatus();
+        break;
+
+    case '/orders/cancel':
+        require_once 'controllers/OrderController.php';
+        $controller = new OrderController();
+        $controller->cancelOrder();
+        break;
+
+    case '/admin/orders/delete':
+        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        require_once 'controllers/AdminController.php';
+        $controller = new AdminController();
+        $controller->deleteOrder($id);
         break;
 
     // Trang không tồn tại

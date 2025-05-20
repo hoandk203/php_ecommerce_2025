@@ -3,7 +3,7 @@ class AdminController {
     private $db;
 
     public function __construct() {
-        require_once 'config/database.php';
+        require_once 'config/Database.php';
         $database = new Database();
         $this->db = $database->getConnection();
 
@@ -359,6 +359,24 @@ class AdminController {
         }
 
         header("Location: /admin/orders/view?id=$order_id");
+        exit;
+    }
+
+    // Xóa đơn hàng
+    public function deleteOrder($id) {
+        require_once 'models/Order.php';
+        $order = new Order($this->db);
+
+        // Kiểm tra đơn hàng tồn tại
+        if ($order->getById($id)) {
+            if ($order->delete()) {
+                $_SESSION['success'] = "Xóa đơn hàng thành công!";
+            } else {
+                $_SESSION['error'] = "Đã xảy ra lỗi khi xóa đơn hàng!";
+            }
+        }
+
+        header("Location: /admin/orders");
         exit;
     }
 }

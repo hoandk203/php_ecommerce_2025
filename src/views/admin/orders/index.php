@@ -64,7 +64,12 @@ $path = "/admin/orders";
                             <td><?php echo date('d/m/Y H:i', strtotime($order['created_at'])); ?></td>
                             <td>
                                 <a href="/admin/orders/view?id=<?php echo $order['id']; ?>" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-eye"></i> Chi tiết
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="/admin/orders/delete?id=<?php echo $order['id']; ?>"
+                                   class="btn btn-sm btn-outline-danger"
+                                   onclick="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này? Hành động này không thể hoàn tác!');">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </td>
                         </tr>

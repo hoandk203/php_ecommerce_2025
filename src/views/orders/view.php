@@ -135,6 +135,20 @@
                             </tfoot>
                         </table>
                     </div>
+                    <?php if ($order->status === 'pending'): ?>
+                        <button type="button" class="btn btn-danger btn-sm ms-2" onclick="confirmCancelOrder(<?php echo $order->id; ?>)">
+                            Hủy đơn hàng
+                        </button>
+                    <?php endif; ?>
+
+                    <!-- Add this JavaScript at the bottom of the file, before the footer -->
+                    <script>
+                        function confirmCancelOrder(orderId) {
+                            if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')) {
+                                window.location.href = '/orders/cancel?id=' + orderId;
+                            }
+                        }
+                    </script>
                 </div>
             </div>
         </div>
