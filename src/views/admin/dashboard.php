@@ -75,6 +75,52 @@ $path = "/admin";
     </div>
 </div>
 
+<!-- Biểu đồ thống kê doanh thu theo tháng -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Thống kê doanh thu theo tháng</h5>
+                <div>
+                    <select id="chartType" class="form-select form-select-sm" style="width: auto; display: inline-block;">
+                        <option value="bar">Biểu đồ cột</option>
+                        <option value="line">Biểu đồ đường</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="revenueChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Biểu đồ thống kê doanh thu sản phẩm theo tháng -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Thống kê doanh thu sản phẩm theo tháng</h5>
+                <div>
+                    <select id="monthSelector" class="form-select form-select-sm" style="width: auto; display: inline-block;">
+                        <?php for ($i = 1; $i <= 12; $i++): ?>
+                            <option value="<?php echo $i; ?>" <?php echo date('n') == $i ? 'selected' : ''; ?>>
+                                Tháng <?php echo $i; ?>
+                            </option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="productRevenueChart" height="100"></canvas>
+                <div id="noDataMessage" class="text-center py-5 d-none">
+                    <p class="text-muted">Không có dữ liệu doanh thu sản phẩm cho tháng này</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Đơn hàng gần đây -->
 <div class="row">
     <div class="col-md-12">
@@ -91,6 +137,7 @@ $path = "/admin";
                             <th>Mã đơn hàng</th>
                             <th>Khách hàng</th>
                             <th>Tổng tiền</th>
+                            <th>Phương thức</th>
                             <th>Trạng thái</th>
                             <th>Ngày đặt</th>
                             <th>Thao tác</th>
@@ -102,6 +149,20 @@ $path = "/admin";
                                 <td>#<?php echo $order['id']; ?></td>
                                 <td><?php echo $order['user_name']; ?></td>
                                 <td><?php echo number_format($order['total_amount'], 0, ',', '.'); ?> VND</td>
+                                <td>
+                                    <?php
+                                    $payment_method = 'Chưa thanh toán';
+                                    switch ($order['payment_method']) {
+                                        case 'cod':
+                                            $payment_method = 'COD';
+                                            break;
+                                        case 'vnpay':
+                                            $payment_method = 'VNPAY';
+                                            break;
+                                    }
+                                    echo $payment_method;
+                                    ?>
+                                </td>
                                 <td>
                                     <?php
                                     $status_badge = 'secondary';
@@ -147,5 +208,202 @@ $path = "/admin";
         </div>
     </div>
 </div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// Dữ liệu doanh thu theo tháng
+const monthLabels = <?php echo $monthLabelsJson; ?>;
+const revenueData = <?php echo $monthlyRevenueJson; ?>;
+const productRevenueData = <?php echo $productRevenueJson; ?>;
+
+// Biểu đồ doanh thu theo tháng
+const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+let revenueChart = new Chart(revenueCtx, {
+    type: 'bar',
+    data: {
+        labels: monthLabels,
+        datasets: [{
+            label: 'Doanh thu (VND)',
+            data: revenueData,
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return new Intl.NumberFormat('vi-VN', { 
+                            style: 'currency', 
+                            currency: 'VND',
+                            maximumFractionDigits: 0
+                        }).format(value);
+                    }
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return new Intl.NumberFormat('vi-VN', { 
+                            style: 'currency', 
+                            currency: 'VND',
+                            maximumFractionDigits: 0
+                        }).format(context.raw);
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Thay đổi loại biểu đồ
+document.getElementById('chartType').addEventListener('change', function() {
+    revenueChart.destroy();
+    revenueChart = new Chart(revenueCtx, {
+        type: this.value,
+        data: {
+            labels: monthLabels,
+            datasets: [{
+                label: 'Doanh thu (VND)',
+                data: revenueData,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return new Intl.NumberFormat('vi-VN', { 
+                                style: 'currency', 
+                                currency: 'VND',
+                                maximumFractionDigits: 0
+                            }).format(value);
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return new Intl.NumberFormat('vi-VN', { 
+                                style: 'currency', 
+                                currency: 'VND',
+                                maximumFractionDigits: 0
+                            }).format(context.raw);
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+
+// Biểu đồ doanh thu sản phẩm theo tháng
+const productRevenueCtx = document.getElementById('productRevenueChart').getContext('2d');
+let productRevenueChart;
+
+function updateProductRevenueChart(month) {
+    // Nếu đã có biểu đồ, hủy nó trước
+    if (productRevenueChart) {
+        productRevenueChart.destroy();
+    }
+    
+    const noDataMessage = document.getElementById('noDataMessage');
+    
+    // Kiểm tra xem có dữ liệu cho tháng đã chọn không
+    if (!productRevenueData[month] || productRevenueData[month].length === 0) {
+        noDataMessage.classList.remove('d-none');
+        return;
+    }
+    
+    noDataMessage.classList.add('d-none');
+    
+    // Chuẩn bị dữ liệu cho biểu đồ
+    const labels = productRevenueData[month].map(item => item.product_name);
+    const data = productRevenueData[month].map(item => item.revenue);
+    
+    // Tạo biểu đồ mới
+    productRevenueChart = new Chart(productRevenueCtx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Doanh thu (VND)',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            indexAxis: 'y',
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return new Intl.NumberFormat('vi-VN', { 
+                                style: 'currency', 
+                                currency: 'VND',
+                                maximumFractionDigits: 0
+                            }).format(value);
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return new Intl.NumberFormat('vi-VN', { 
+                                style: 'currency', 
+                                currency: 'VND',
+                                maximumFractionDigits: 0
+                            }).format(context.raw);
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Khởi tạo biểu đồ với tháng hiện tại
+const currentMonth = new Date().getMonth() + 1; // JavaScript tháng bắt đầu từ 0
+updateProductRevenueChart(currentMonth);
+
+// Cập nhật biểu đồ khi thay đổi tháng
+document.getElementById('monthSelector').addEventListener('change', function() {
+    updateProductRevenueChart(parseInt(this.value));
+});
+</script>
 
 <?php include_once "views/layouts/footer.php"; ?>

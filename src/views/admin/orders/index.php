@@ -19,6 +19,7 @@ $path = "/admin/orders";
                         <th>Khách hàng</th>
                         <th>Email</th>
                         <th>Tổng tiền</th>
+                        <th>Phương thức</th>
                         <th>Trạng thái</th>
                         <th>Ngày đặt</th>
                         <th width="100">Thao tác</th>
@@ -31,6 +32,20 @@ $path = "/admin/orders";
                             <td><?php echo $order['name']; ?></td>
                             <td><?php echo $order['email']; ?></td>
                             <td><?php echo number_format($order['total_amount'], 0, ',', '.'); ?> VND</td>
+                            <td>
+                                <?php
+                                $payment_method = 'Chưa thanh toán';
+                                switch ($order['payment_method']) {
+                                    case 'cod':
+                                        $payment_method = 'COD';
+                                        break;
+                                    case 'vnpay':
+                                        $payment_method = 'VNPAY';
+                                        break;
+                                }
+                                echo $payment_method;
+                                ?>
+                            </td>
                             <td>
                                 <?php
                                 $status_badge = 'secondary';

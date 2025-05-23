@@ -1,10 +1,9 @@
 </main>
-
-<footer class="text-white py-4 mt-5" style="background-color: #bf1414; width: 100%">
+<footer class="text-white py-4 mt-5 z-3" style="background-color: #bf1414; width: 100%">
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <img style="width: 150px; margin-bottom: 16px" src="assets/image/logo.png" alt="">
+                <img style="width: 150px; margin-bottom: 16px" src="../assets/image/logo.png" alt="">
                 <p>Chuyên cung cấp các sản phẩm công nghệ chính hãng.</p>
             </div>
             <div class="col-md-4">

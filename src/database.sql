@@ -22,11 +22,12 @@ CREATE TABLE IF NOT EXISTS products (
                                         category_id INTEGER REFERENCES categories(id),
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    price DECIMAL(10, 2) NOT NULL,
+    price DECIMAL(12, 2) NOT NULL,
     stock INTEGER NOT NULL DEFAULT 0,
     image VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
+ALTER TABLE products ADD COLUMN discount INTEGER DEFAULT 0 CHECK (discount >= 0 AND discount <= 100);
 
 -- Tạo bảng orders
 CREATE TABLE IF NOT EXISTS orders (
@@ -48,7 +49,7 @@ CREATE TABLE IF NOT EXISTS order_items (
                                            order_id INTEGER REFERENCES orders(id),
     product_id INTEGER REFERENCES products(id),
     quantity INTEGER NOT NULL,
-    price DECIMAL(10, 2) NOT NULL
+    price DECIMAL(12, 2) NOT NULL
     );
 
 -- Tạo bảng carts

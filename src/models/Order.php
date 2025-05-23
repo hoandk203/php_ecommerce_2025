@@ -129,5 +129,50 @@ class Order {
 
         return $stmt->execute();
     }
+
+    // Lấy doanh thu theo tháng trong năm hiện tại
+    public function getMonthlyRevenue($year = null) {
+        if ($year === null) {
+            $year = date('Y');
+        }
+        
+        $query = "SELECT 
+                    EXTRACT(MONTH FROM created_at) as month, 
+                    SUM(total_amount) as revenue
+                FROM " . $this->table_name . "
+                WHERE EXTRACT(YEAR FROM created_at) = ? AND status != 'cancelled'
+                GROUP BY EXTRACT(MONTH FROM created_at)
+                ORDER BY EXTRACT(MONTH FROM created_at)";
+                
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $year);
+        $stmt->execute();
+        
+        return $stmt;
+    }
+
+    // Lấy doanh thu theo sản phẩm theo tháng
+    public function getMonthlyProductRevenue($year = null) {
+        if ($year === null) {
+            $year = date('Y');
+        }
+        
+        $query = "SELECT 
+                    EXTRACT(MONTH FROM o.created_at) as month,
+                    p.name as product_name,
+                    SUM(oi.quantity * oi.price) as revenue
+                FROM " . $this->table_name . " o
+                JOIN order_items oi ON o.id = oi.order_id
+                JOIN products p ON oi.product_id = p.id
+                WHERE EXTRACT(YEAR FROM o.created_at) = ? AND o.status != 'cancelled'
+                GROUP BY EXTRACT(MONTH FROM o.created_at), p.id, p.name
+                ORDER BY EXTRACT(MONTH FROM o.created_at), revenue DESC";
+                
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $year);
+        $stmt->execute();
+        
+        return $stmt;
+    }
 }
 ?>

@@ -76,7 +76,19 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <h6 class="fw-bold">Phương thức thanh toán:</h6>
-                            <p><?php echo $order->payment_method === 'cod' ? 'Thanh toán khi nhận hàng (COD)' : 'Chuyển khoản ngân hàng'; ?></p>
+                            <p><?php
+                                $method= $order->payment_method;
+                                switch ($method) {
+                                    case 'cod':
+                                        echo 'COD';
+                                        break;
+                                    case 'vnpay':
+                                        echo 'VNPAY';
+                                        break;
+                                    default:
+                                        echo 'Chưa thanh toán';
+                                }
+                                ?></p>
                         </div>
                         <div class="col-md-6">
                             <h6 class="fw-bold">Tổng tiền:</h6>

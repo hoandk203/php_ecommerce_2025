@@ -29,9 +29,9 @@
                                 <thead>
                                 <tr>
                                     <th>Sản phẩm</th>
-                                    <th width="120">Hình ảnh</th>
                                     <th width="150">Đơn giá</th>
                                     <th width="120">Số lượng</th>
+                                    <th width="100">Giảm giá(%)</th>
                                     <th width="150">Thành tiền</th>
                                     <th width="90">Thao tác</th>
                                 </tr>
@@ -40,10 +40,9 @@
                                 <?php foreach ($cart_items as $item): ?>
                                     <tr>
                                         <td>
-                                            <a style="text-decoration: none" href="/products/detail?id=<?php echo $item['id']; ?>"><?php echo $item['name']; ?></a>
-                                        </td>
-                                        <td>
                                             <img src="<?php echo !empty($item['image']) ? $item['image'] : 'https://via.placeholder.com/80x80?text=No+Image'; ?>" alt="<?php echo $item['name']; ?>" class="img-thumbnail" width="80">
+
+                                            <p style="font-weight: bold; display: inline-block"><?php echo $item['name']; ?></p>
                                         </td>
                                         <td><?php echo number_format($item['price'], 0, ',', '.'); ?> VND</td>
                                         <td>
@@ -55,6 +54,7 @@
                                                 </button>
                                             </form>
                                         </td>
+                                        <td><?php echo $item['discount']; ?>%</td>
                                         <td><?php echo number_format($item['subtotal'], 0, ',', '.'); ?> VND</td>
                                         <td>
                                             <a href="/cart/remove?id=<?php echo $item['product_id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
@@ -75,7 +75,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between mt-4">
-                            <a href="/products" class="btn btn-outline-primary">
+                            <a href="/products" class="btn btn-outline-dark">
                                 <i class="fas fa-arrow-left"></i> Tiếp tục mua hàng
                             </a>
                             <a href="/checkout" class="btn btn-success">
@@ -86,7 +86,7 @@
                         <div class="alert alert-info text-center py-4">
                             <i class="fas fa-shopping-cart fa-3x mb-3"></i>
                             <p>Giỏ hàng của bạn đang trống.</p>
-                            <a href="/products" class="btn btn-primary mt-2">Mua sắm ngay</a>
+                            <a href="/products" class="btn btn-dark mt-2">Mua sắm ngay</a>
                         </div>
                     <?php endif; ?>
                 </div>

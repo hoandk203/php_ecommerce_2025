@@ -40,13 +40,20 @@ $path = "/admin/products";
                             <textarea class="form-control" id="description" name="description" rows="5"><?php echo $product->description; ?></textarea>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label for="price" class="form-label">Giá (VND)</label>
-                                <input type="number" class="form-control" id="price" name="price" min="0" value="<?php echo $product->price; ?>" required>
+                                <input type="number" class="form-control" id="price" name="price" min="0" required
+                                       value="<?php echo isset($product->price) ? $product->price : ''; ?>">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <label for="discount" class="form-label">Giảm giá (%)</label>
+                                <input type="number" class="form-control" id="discount" name="discount" min="0" max="100"
+                                       value="<?php echo isset($product->discount) ? $product->discount : 0; ?>">
+                            </div>
+                            <div class="col-md-4">
                                 <label for="stock" class="form-label">Số lượng tồn kho</label>
-                                <input type="number" class="form-control" id="stock" name="stock" min="0" value="<?php echo $product->stock; ?>" required>
+                                <input type="number" class="form-control" id="stock" name="stock" min="0" required
+                                       value="<?php echo isset($product->stock) ? $product->stock : ''; ?>">
                             </div>
                         </div>
                         <div class="mb-3">

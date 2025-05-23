@@ -23,6 +23,7 @@ $path = "/admin/products";
                         <th>Tên sản phẩm</th>
                         <th>Danh mục</th>
                         <th>Giá</th>
+                        <th>Giảm giá(%)</th>
                         <th>Tồn kho</th>
                         <th width="120">Thao tác</th>
                     </tr>
@@ -37,6 +38,7 @@ $path = "/admin/products";
                             <td><?php echo $product['name']; ?></td>
                             <td><?php echo $product['category_name']; ?></td>
                             <td><?php echo number_format($product['price'], 0, ',', '.'); ?> VND</td>
+                            <td><?php echo $product['discount']; ?>%</td>
                             <td><?php echo $product['stock']; ?></td>
                             <td>
                                 <a href="/admin/products/edit?id=<?php echo $product['id']; ?>" class="btn btn-sm btn-outline-primary">

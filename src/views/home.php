@@ -107,6 +107,11 @@
                                                    <div class="card h-100 product-card shadow-sm " style="border-radius: 16px;">
                                                        <img style="border-top-left-radius: 16px; border-top-right-radius: 16px;" src="<?php echo !empty($product['image']) ? $product['image'] : 'https://via.placeholder.com/300x200?text=No+Image'; ?>" class="card-img-top" alt="<?php echo $product['name']; ?>">
                                                        <div class="card-body position-relative shadow"  style="padding-bottom: 54px; border-radius: 16px;">
+                                                           <?php if (!empty($product['discount']) && $product['discount'] > 0): ?>
+                                                               <div class="position-absolute start-0 bg-danger text-white py-1 px-2" style="top: -150px;border-radius: 0 0 8px 0; transform: translateY(-100%);">
+                                                                   -<?php echo $product['discount']; ?>%
+                                                               </div>
+                                                           <?php endif; ?>
                                                            <h5 class="card-title"><?php echo $product['name']; ?></h5>
                                                            <p class="card-text text-truncate"><?php echo $product['description']; ?></p>
                                                            <p class="card-text text-danger fw-bold"><?php echo number_format($product['price'], 0, ',', '.'); ?> VND</p>

@@ -240,15 +240,17 @@ class OrderController {
                     // Xóa giỏ hàng
                     require_once 'models/Cart.php';
                     $cart = new Cart($this->db);
-                    $cart->clear();
-                    
-                    // Xóa thông tin đơn hàng tạm thời
-                    unset($_SESSION['pending_order']);
-                    unset($_SESSION['vnp_transaction']);
-                    
-                    $_SESSION['success'] = "Thanh toán thành công! Đơn hàng của bạn đã được tạo.";
-                    header("Location: /orders");
-                    exit;
+                    $cart_id = $cart->getOrCreateCart($pendingOrder['user_id']); // Get the correct cart
+                    $cart->id = $cart_id; // Set the cart ID
+                    if ($cart->clear()) {
+                        // Xóa thông tin đơn hàng tạm thời
+                        unset($_SESSION['pending_order']);
+                        unset($_SESSION['vnp_transaction']);
+
+                        $_SESSION['success'] = "Thanh toán thành công! Đơn hàng của bạn đã được tạo.";
+                        header("Location: /orders");
+                        exit;
+                    }
                 }
             }
         } else {

@@ -49,6 +49,56 @@ class AdminController {
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         $recentOrderStmt = $stmt;
+        
+        // Lấy dữ liệu doanh thu theo tháng
+        $monthlyRevenueStmt = $order->getMonthlyRevenue();
+        
+        // Lấy dữ liệu doanh thu sản phẩm theo tháng
+        $monthlyProductRevenueStmt = $order->getMonthlyProductRevenue();
+        
+        // Chuẩn bị dữ liệu cho biểu đồ
+        $monthLabels = [];
+        $revenueData = [];
+        
+        // Khởi tạo mảng với 12 tháng, giá trị mặc định là 0
+        for ($i = 1; $i <= 12; $i++) {
+            $monthLabels[] = 'Tháng ' . $i;
+            $revenueData[$i] = 0;
+        }
+        
+        // Điền dữ liệu thực tế
+        while ($row = $monthlyRevenueStmt->fetch(PDO::FETCH_ASSOC)) {
+            $month = (int)$row['month'];
+            $revenueData[$month] = (float)$row['revenue'];
+        }
+        
+        // Chuyển đổi mảng kết hợp thành mảng tuần tự cho JavaScript
+        $revenueData = array_values($revenueData);
+        
+        // Chuẩn bị dữ liệu sản phẩm bán chạy theo tháng
+        $productRevenueData = [];
+        while ($row = $monthlyProductRevenueStmt->fetch(PDO::FETCH_ASSOC)) {
+            $month = (int)$row['month'];
+            $productName = $row['product_name'];
+            $revenue = (float)$row['revenue'];
+            
+            if (!isset($productRevenueData[$month])) {
+                $productRevenueData[$month] = [];
+            }
+            
+            // Chỉ lấy 5 sản phẩm có doanh thu cao nhất mỗi tháng
+            if (count($productRevenueData[$month]) < 5) {
+                $productRevenueData[$month][] = [
+                    'product_name' => $productName,
+                    'revenue' => $revenue
+                ];
+            }
+        }
+        
+        // Chuyển đổi dữ liệu sang định dạng JSON để sử dụng trong JavaScript
+        $monthlyRevenueJson = json_encode($revenueData);
+        $monthLabelsJson = json_encode($monthLabels);
+        $productRevenueJson = json_encode($productRevenueData);
 
         require_once 'views/admin/dashboard.php';
     }
@@ -210,6 +260,7 @@ class AdminController {
             $product->description = $_POST['description'];
             $product->price = $_POST['price'];
             $product->stock = $_POST['stock'];
+            $product->discount = $_POST['discount'];
 
             // Xử lý upload ảnh
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -263,6 +314,7 @@ class AdminController {
             $product->description = $_POST['description'];
             $product->price = $_POST['price'];
             $product->stock = $_POST['stock'];
+            $product->discount = $_POST['discount'];
 
             // Xử lý upload ảnh
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -379,5 +431,6 @@ class AdminController {
         header("Location: /admin/orders");
         exit;
     }
+
 }
 ?>

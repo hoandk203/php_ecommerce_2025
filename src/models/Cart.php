@@ -36,19 +36,21 @@ class Cart {
     
     // Lấy tất cả sản phẩm trong giỏ hàng
     public function getItems() {
-        $query = "SELECT ci.id, ci.product_id, ci.quantity, p.name, p.price, p.image, p.stock 
-                 FROM cart_items ci
-                 JOIN products p ON ci.product_id = p.id
-                 WHERE ci.cart_id = ?";
+        $query = "SELECT ci.id, ci.product_id, ci.quantity, p.name, p.price, p.discount, 
+             p.image, p.stock,
+             ROUND(p.price * (1 - p.discount::float/100)) as discounted_price
+             FROM cart_items ci
+             JOIN products p ON ci.product_id = p.id
+             WHERE ci.cart_id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$this->id]);
-        
+
         $items = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $row['subtotal'] = $row['price'] * $row['quantity'];
+            $row['subtotal'] = $row['discounted_price'] * $row['quantity'];
             $items[] = $row;
         }
-        
+
         return $items;
     }
     
@@ -100,14 +102,14 @@ class Cart {
     
     // Tính tổng giá trị giỏ hàng
     public function getTotal() {
-        $query = "SELECT SUM(ci.quantity * p.price) as total 
-                 FROM cart_items ci
-                 JOIN products p ON ci.product_id = p.id
-                 WHERE ci.cart_id = ?";
+        $query = "SELECT SUM(ci.quantity * ROUND(p.price * (1 - p.discount::float/100))) as total 
+             FROM cart_items ci
+             JOIN products p ON ci.product_id = p.id
+             WHERE ci.cart_id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$this->id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         return $row['total'] ? $row['total'] : 0;
     }
     

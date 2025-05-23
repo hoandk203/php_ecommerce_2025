@@ -10,10 +10,19 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="/assets/css/style.css" rel="stylesheet">
+    <style>
+        .navbar .nav-link {
+            color: white;
+        }
+        .navbar .nav-link:hover {
+            color: rgba(255,255,255,0.7);
+
+        }
+    </style>
 </head>
 <body style="padding-top: 100px; min-height: 100vh">
 <header>
-    <nav class="navbar navbar-expand-lg navbar-dark position-fixed top-0 w-100 z-3" style="background-color: #bf1414;">
+    <nav class="navbar navbar-expand-lg position-fixed top-0 w-100 z-3" style="background-color: #bf1414;">
         <div class="container">
             <a class="navbar-brand" href="/"><img src="/assets/image/logo.png" alt="logo-hoan-shop" style="width: 100px"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -22,10 +31,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="/">Trang chủ</a>
+                        <a class="nav-link" href="/">Trang chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="/products">Sản phẩm</a>
+                        <a class="nav-link" href="/products">Sản phẩm</a>
                     </li>
                 </ul>
 
@@ -40,7 +49,7 @@
 
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="/cart">
+                        <a class="nav-link" href="/cart">
                             <i class="fas fa-shopping-cart"></i> Giỏ hàng
                             <?php
                             if (isset($_SESSION['user']['id'])) {
@@ -66,7 +75,7 @@
 
                     <?php if (isset($_SESSION['user'])): ?>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-user"></i> <?php echo $_SESSION['user']['name']; ?>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -82,10 +91,10 @@
                         </li>
                     <?php else: ?>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="/login">Đăng nhập</a>
+                            <a class="nav-link" href="/login">Đăng nhập</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="/register">Đăng ký</a>
+                            <a class="nav-link" href="/register">Đăng ký</a>
                         </li>
                     <?php endif; ?>
                 </ul>

@@ -9,6 +9,7 @@ class Product {
     public $description;
     public $price;
     public $stock;
+    public $discount;
     public $image;
     public $created_at;
     public $category_name;
@@ -48,6 +49,7 @@ class Product {
             $this->description = $row['description'];
             $this->price = $row['price'];
             $this->stock = $row['stock'];
+            $this->discount = $row['discount'];
             $this->image = $row['image'];
             $this->created_at = $row['created_at'];
             $this->category_name = $row['category_name'];
@@ -89,8 +91,8 @@ class Product {
     // Tạo sản phẩm mới
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " 
-                (category_id, name, description, price, stock, image) 
-                VALUES (?, ?, ?, ?, ?, ?)";
+                (category_id, name, description, price, stock,discount, image) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $this->conn->prepare($query);
 
@@ -99,7 +101,9 @@ class Product {
         $stmt->bindParam(3, $this->description);
         $stmt->bindParam(4, $this->price);
         $stmt->bindParam(5, $this->stock);
-        $stmt->bindParam(6, $this->image);
+        $stmt->bindParam(6, $this->discount);
+        $stmt->bindParam(7, $this->image);
+
 
         if($stmt->execute()) {
             return true;
@@ -110,7 +114,7 @@ class Product {
     // Cập nhật sản phẩm
     public function update() {
         $query = "UPDATE " . $this->table_name . " 
-                SET category_id = ?, name = ?, description = ?, price = ?, stock = ?";
+                SET category_id = ?, name = ?, description = ?, price = ?, stock = ?, discount = ?";
 
         // Nếu có cập nhật hình ảnh
         if(!empty($this->image)) {
@@ -126,13 +130,14 @@ class Product {
         $stmt->bindParam(3, $this->description);
         $stmt->bindParam(4, $this->price);
         $stmt->bindParam(5, $this->stock);
+        $stmt->bindParam(6, $this->discount);
 
         // Nếu có cập nhật hình ảnh
         if(!empty($this->image)) {
-            $stmt->bindParam(6, $this->image);
-            $stmt->bindParam(7, $this->id);
+            $stmt->bindParam(7, $this->image);
+            $stmt->bindParam(8, $this->id);
         } else {
-            $stmt->bindParam(6, $this->id);
+            $stmt->bindParam(7, $this->id);
         }
 
         if($stmt->execute()) {

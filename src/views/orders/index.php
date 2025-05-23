@@ -1,5 +1,10 @@
 <?php include_once "views/layouts/header.php"; ?>
 
+<style>
+    .list-group-item.active {
+        background-color: #303030;
+    }
+</style>
     <div class="row">
         <div class="col-md-12 mb-3">
             <nav aria-label="breadcrumb">
@@ -14,7 +19,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-dark text-white">
                     <h5 class="mb-0">Menu tài khoản</h5>
                 </div>
                 <div class="card-body">
@@ -29,7 +34,7 @@
 
         <div class="col-md-8">
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-dark text-white">
                     <h5 class="mb-0">Đơn hàng của tôi</h5>
                 </div>
                 <div class="card-body">
@@ -41,6 +46,7 @@
                                     <th>Mã đơn hàng</th>
                                     <th>Ngày đặt</th>
                                     <th>Tổng tiền</th>
+                                    <th>Phương thức</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
@@ -51,6 +57,20 @@
                                         <td>#<?php echo $order['id']; ?></td>
                                         <td><?php echo date('d/m/Y H:i', strtotime($order['created_at'])); ?></td>
                                         <td><?php echo number_format($order['total_amount'], 0, ',', '.'); ?> VND</td>
+                                        <td>
+                                            <?php
+                                            $payment_method = 'Chưa thanh toán';
+                                            switch ($order['payment_method']) {
+                                                case 'cod':
+                                                    $payment_method = 'COD';
+                                                    break;
+                                                case 'vnpay':
+                                                    $payment_method = 'VNPAY';
+                                                    break;
+                                            }
+                                            echo $payment_method;
+                                            ?>
+                                        </td>
                                         <td>
                                             <?php
                                             $status_badge = 'secondary';

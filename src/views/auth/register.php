@@ -3,7 +3,7 @@
     <div class="row justify-content-center mt-5">
         <div class="col-md-6">
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-dark text-white">
                     <h4 class="mb-0">Đăng ký tài khoản</h4>
                 </div>
                 <div class="card-body">
@@ -31,14 +31,14 @@
                             <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">Đăng ký</button>
+                            <button type="submit" class="btn btn-dark">Đăng ký</button>
                         </div>
                     </form>
 
                     <hr>
 
                     <div class="text-center">
-                        <p>Đã có tài khoản? <a href="/login">Đăng nhập</a></p>
+                        <p>Đã có tài khoản? <a style="color: black; font-weight: bold" href="/login">Đăng nhập</a></p>
                     </div>
                 </div>
             </div>
