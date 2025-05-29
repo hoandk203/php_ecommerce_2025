@@ -28,6 +28,11 @@
                             <i class="fas fa-users"></i> Quản lý người dùng
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?php echo strpos($path, '/admin/chatbot') === 0 ? 'active' : ''; ?>" href="/admin/chatbot">
+                            <i class="fas fa-robot"></i> Quản lý Chatbot
+                        </a>
+                    </li>
                 </ul>
 
                 <hr>

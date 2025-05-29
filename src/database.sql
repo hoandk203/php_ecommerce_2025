@@ -71,6 +71,22 @@ CREATE TABLE IF NOT EXISTS cart_items (
                                           UNIQUE(cart_id, product_id)
 );
 
+CREATE TABLE IF NOT EXISTS chatbot_responses (
+    id SERIAL PRIMARY KEY,
+    keywords TEXT NOT NULL,
+    response TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Thêm một số câu trả lời mẫu
+INSERT INTO chatbot_responses (keywords, response) VALUES
+    ('xin chào,chào,hi,hello', 'Xin chào! Tôi có thể giúp gì cho bạn?'),
+    ('giờ làm việc,thời gian làm việc', 'Chúng tôi làm việc từ 8h00 - 22h00 các ngày trong tuần'),
+    ('phí vận chuyển,ship,giao hàng', 'Phí vận chuyển sẽ được tính dựa trên địa chỉ giao hàng của bạn. Bạn có thể kiểm tra phí vận chuyển trong giỏ hàng.'),
+    ('thanh toán,payment,trả góp', 'Chúng tôi hỗ trợ thanh toán qua: COD (tiền mặt khi nhận hàng), VNPAY, thẻ tín dụng/ghi nợ'),
+    ('đổi trả,hoàn tiền,bảo hành', 'Chúng tôi có chính sách đổi trả trong vòng 7 ngày với sản phẩm còn nguyên vẹn. Vui lòng liên hệ hotline để được hướng dẫn.'),
+    ('tạm biệt,bye,goodbye', 'Cảm ơn bạn đã liên hệ! Chúc bạn một ngày tốt lành!');
+
 -- Tạo tài khoản admin mặc định (password: admin123)
 INSERT INTO users (name, email, password, role) VALUES
     ('Admin', 'admin@example.com', '$2y$10$ZHJ1Ht0GbQhxsOEWQxKQHuM3sGF9nKpBO4xnnrQnC5JZ2YTEIVtlO', 'admin')

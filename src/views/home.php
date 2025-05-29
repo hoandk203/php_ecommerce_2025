@@ -93,7 +93,7 @@
     <div class="row" style="margin-bottom: 80px;">
         <div class="col-md-12">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2>Sản phẩm gần đây</h2>
+                <h2>Sản phẩm Hot</h2>
                 <a href="/products" class="btn btn-outline-primary">Xem tất cả</a>
             </div>
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4">
@@ -136,7 +136,7 @@
     <div class="row">
         <div class="col-md-12">
                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                           <h2>Sản phẩm nổi bật</h2>
+                                           <h2>Sản phẩm gần đây</h2>
                                            <a href="/products" class="btn btn-outline-primary">Xem tất cả</a>
                                        </div>
                                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4">

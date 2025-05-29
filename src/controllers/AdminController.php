@@ -9,6 +9,7 @@ class AdminController {
 
         // Kiểm tra quyền admin
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            $_SESSION['error'] = "Bạn không có quyền truy cập trang này!";
             header("Location: /login");
             exit;
         }
@@ -463,5 +464,93 @@ class AdminController {
         exit;
     }
 
+    // Quản lý chatbot
+    public function chatbot() {
+        require_once 'models/Chatbot.php';
+        $chatbot = new Chatbot($this->db);
+        $responses = $chatbot->getAllResponses();
+
+        require_once 'views/admin/chatbot/index.php';
+    }
+
+    // Thêm câu trả lời chatbot
+    public function createChatbotResponse() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            require_once 'models/Chatbot.php';
+            $chatbot = new Chatbot($this->db);
+
+            $keywords = trim($_POST['keywords']);
+            $response = trim($_POST['response']);
+
+            if (empty($keywords) || empty($response)) {
+                $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin!";
+                header("Location: /admin/chatbot/create");
+                exit;
+            }
+
+            if ($chatbot->addResponse($keywords, $response)) {
+                $_SESSION['success'] = "Thêm câu trả lời thành công!";
+                header("Location: /admin/chatbot");
+                exit;
+            } else {
+                $_SESSION['error'] = "Đã xảy ra lỗi khi thêm câu trả lời!";
+                header("Location: /admin/chatbot/create");
+                exit;
+            }
+        }
+
+        require_once 'views/admin/chatbot/create.php';
+    }
+
+    // Chỉnh sửa câu trả lời chatbot
+    public function editChatbotResponse($id) {
+        require_once 'models/Chatbot.php';
+        $chatbot = new Chatbot($this->db);
+
+        // Kiểm tra câu trả lời tồn tại
+        if (!$chatbot->getResponseById($id)) {
+            $_SESSION['error'] = "Không tìm thấy câu trả lời!";
+            header("Location: /admin/chatbot");
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $keywords = trim($_POST['keywords']);
+            $response = trim($_POST['response']);
+
+            if (empty($keywords) || empty($response)) {
+                $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin!";
+                header("Location: /admin/chatbot/edit?id=" . $id);
+                exit;
+            }
+
+            if ($chatbot->updateResponse($id, $keywords, $response)) {
+                $_SESSION['success'] = "Cập nhật câu trả lời thành công!";
+                header("Location: /admin/chatbot");
+                exit;
+            } else {
+                $_SESSION['error'] = "Đã xảy ra lỗi khi cập nhật câu trả lời!";
+                header("Location: /admin/chatbot/edit?id=" . $id);
+                exit;
+            }
+        }
+
+        require_once 'views/admin/chatbot/edit.php';
+    }
+
+    // Xóa câu trả lời chatbot
+    public function deleteChatbotResponse($id) {
+        require_once 'models/Chatbot.php';
+        $chatbot = new Chatbot($this->db);
+
+        if ($chatbot->deleteResponse($id)) {
+            $_SESSION['success'] = "Xóa câu trả lời thành công!";
+        } else {
+            $_SESSION['error'] = "Đã xảy ra lỗi khi xóa câu trả lời!";
+        }
+
+        header("Location: /admin/chatbot");
+        exit;
+    }
 }
 ?>

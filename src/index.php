@@ -250,6 +250,57 @@ switch ($path) {
         $controller->deleteOrder($id);
         break;
 
+    // Quản lý chatbot
+    case '/admin/chatbot':
+        require_once 'controllers/AdminController.php';
+        $controller = new AdminController();
+        $controller->chatbot();
+        break;
+
+    case '/admin/chatbot/create':
+        require_once 'controllers/AdminController.php';
+        $controller = new AdminController();
+        $controller->createChatbotResponse();
+        break;
+
+    case '/admin/chatbot/edit':
+        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        require_once 'controllers/AdminController.php';
+        $controller = new AdminController();
+        $controller->editChatbotResponse($id);
+        break;
+
+    case '/admin/chatbot/delete':
+        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+        require_once 'controllers/AdminController.php';
+        $controller = new AdminController();
+        $controller->deleteChatbotResponse($id);
+        break;
+
+    case '/chatbot/response':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            require_once 'controllers/ChatbotController.php';
+            $controller = new ChatbotController();
+            $controller->getResponse();
+        }
+        break;
+
+    case '/chatbot/suggestions':
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            require_once 'controllers/ChatbotController.php';
+            $controller = new ChatbotController();
+            $controller->getSuggestions();
+        }
+        break;
+
+    case '/admin/chatbot/add-response':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            require_once 'controllers/ChatbotController.php';
+            $controller = new ChatbotController();
+            $controller->addResponse();
+        }
+        break;
+
     // Trang không tồn tại
     default:
         http_response_code(404);
