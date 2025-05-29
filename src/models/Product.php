@@ -173,7 +173,7 @@ class Product {
         return false;
     }
 
-    public function getFiltered($category_id = null, $min_price = null, $max_price = null, $search = null, $sort = null) {
+    public function getFiltered($category_id = null, $min_price = null, $max_price = null, $search = null, $sort = null, $limit = null, $offset = null) {
         $query = "SELECT p.*, c.name as category_name 
               FROM " . $this->table_name . " p
               LEFT JOIN categories c ON p.category_id = c.id
@@ -199,32 +199,89 @@ class Product {
             $params[] = $max_price;
         }
 
-        // Tìm kiếm theo từ khóa
+        // Tìm kiếm theo tên hoặc mô tả
         if ($search) {
             $query .= " AND (p.name ILIKE ? OR p.description ILIKE ?)";
-            $search = "%$search%";
-            $params[] = $search;
-            $params[] = $search;
+            $search_param = "%" . $search . "%";
+            $params[] = $search_param;
+            $params[] = $search_param;
         }
 
-        // Sắp xếp theo giá
+        // Sắp xếp
         if ($sort === 'asc') {
-            $query .= " ORDER BY p.price ASC, p.id DESC";
+            $query .= " ORDER BY p.price ASC";
         } elseif ($sort === 'desc') {
-            $query .= " ORDER BY p.price DESC, p.id DESC";
+            $query .= " ORDER BY p.price DESC";
         } else {
             $query .= " ORDER BY p.id DESC";
         }
 
-        $stmt = $this->conn->prepare($query);
-
-        // Bind các tham số
-        foreach ($params as $key => $value) {
-            $stmt->bindValue($key + 1, $value);
+        // Phân trang
+        if ($limit !== null) {
+            $query .= " LIMIT ?";
+            $params[] = $limit;
+        }
+        if ($offset !== null) {
+            $query .= " OFFSET ?";
+            $params[] = $offset;
         }
 
+        $stmt = $this->conn->prepare($query);
+        
+        // Bind các tham số
+        foreach ($params as $i => $param) {
+            $stmt->bindValue($i + 1, $param);
+        }
+        
         $stmt->execute();
         return $stmt;
+    }
+
+    // Lấy tổng số sản phẩm theo điều kiện lọc
+    public function getTotalFiltered($category_id = null, $min_price = null, $max_price = null, $search = null) {
+        $query = "SELECT COUNT(*) as total 
+              FROM " . $this->table_name . " p
+              LEFT JOIN categories c ON p.category_id = c.id
+              WHERE 1=1";
+
+        $params = array();
+
+        // Lọc theo danh mục
+        if ($category_id) {
+            $query .= " AND p.category_id = ?";
+            $params[] = $category_id;
+        }
+
+        // Lọc theo giá tối thiểu
+        if ($min_price !== null) {
+            $query .= " AND p.price >= ?";
+            $params[] = $min_price;
+        }
+
+        // Lọc theo giá tối đa
+        if ($max_price !== null) {
+            $query .= " AND p.price <= ?";
+            $params[] = $max_price;
+        }
+
+        // Tìm kiếm theo tên hoặc mô tả
+        if ($search) {
+            $query .= " AND (p.name ILIKE ? OR p.description ILIKE ?)";
+            $search_param = "%" . $search . "%";
+            $params[] = $search_param;
+            $params[] = $search_param;
+        }
+
+        $stmt = $this->conn->prepare($query);
+        
+        // Bind các tham số
+        foreach ($params as $i => $param) {
+            $stmt->bindValue($i + 1, $param);
+        }
+        
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)$row['total'];
     }
 }
 ?>

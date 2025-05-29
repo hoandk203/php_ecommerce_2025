@@ -51,7 +51,6 @@ $path = "/admin/orders";
                                     <option value="processing" <?php echo $order->status === 'processing' ? 'selected' : ''; ?>>Đang chuẩn bị</option>
                                     <option value="shipping" <?php echo $order->status === 'shipping' ? 'selected' : ''; ?>>Đang giao hàng</option>
                                     <option value="completed" <?php echo $order->status === 'completed' ? 'selected' : ''; ?>>Hoàn thành</option>
-                                    <option value="cancelled" <?php echo $order->status === 'cancelled' ? 'selected' : ''; ?>>Đã hủy</option>
                                 </select>
                                 <button type="submit" class="btn btn-primary col-2">Cập nhật</button>
                             </form>

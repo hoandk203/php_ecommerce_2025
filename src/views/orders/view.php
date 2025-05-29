@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-dark text-white">
                     <h5 class="mb-0">Menu tài khoản</h5>
                 </div>
                 <div class="card-body">
@@ -30,7 +30,7 @@
 
         <div class="col-md-8">
             <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Chi tiết đơn hàng #<?php echo $order->id; ?></h5>
                     <a href="/orders" class="btn btn-light btn-sm">Quay lại</a>
                 </div>

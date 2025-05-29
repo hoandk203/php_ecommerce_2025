@@ -3,6 +3,24 @@ include_once "views/layouts/header.php";
 $path = "/admin/products";
 ?>
 
+<style>
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: #fff;
+    }
+    
+    .pagination .page-link {
+        color: #0d6efd;
+    }
+    
+    .pagination .page-link:hover {
+        color: #fff;
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+</style>
+
 <?php include_once "views/layouts/admin_sidebar.php"; ?>
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -29,7 +47,7 @@ $path = "/admin/products";
                     </tr>
                     </thead>
                     <tbody>
-                    <?php while ($product = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+                    <?php while ($product = $products->fetch(PDO::FETCH_ASSOC)): ?>
                         <tr>
                             <td><?php echo $product['id']; ?></td>
                             <td>
@@ -52,6 +70,37 @@ $path = "/admin/products";
                     <?php endwhile; ?>
                     </tbody>
                 </table>
+
+                <!-- Phân trang -->
+                <?php if ($total_pages > 1): ?>
+                <div class="d-flex justify-content-center mt-4">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <?php if ($current_page > 1): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $current_page - 1; ?>" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                <li class="page-item <?php echo $i == $current_page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <?php if ($current_page < $total_pages): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $current_page + 1; ?>" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

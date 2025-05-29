@@ -15,12 +15,25 @@ class ProductController {
         $min_price = isset($_GET['min_price']) && $_GET['min_price'] !== '' ? (float)$_GET['min_price'] : null;
         $max_price = isset($_GET['max_price']) && $_GET['max_price'] !== '' ? (float)$_GET['max_price'] : null;
         $sort = isset($_GET['sort']) ? $_GET['sort'] : null;
+        
+        // Thêm logic phân trang
+        $items_per_page = 9; // Số sản phẩm mỗi trang
+        $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($current_page - 1) * $items_per_page;
 
         require_once 'models/Product.php';
         $product = new Product($this->db);
 
-        // Lấy danh sách sản phẩm đã lọc
-        $products = $product->getFiltered($category_id, $min_price, $max_price, $search, $sort);
+        // Lấy tổng số sản phẩm để tính số trang
+        $total_items = $product->getTotalFiltered($category_id, $min_price, $max_price, $search);
+        $total_pages = ceil($total_items / $items_per_page);
+        
+        // Đảm bảo current_page hợp lệ
+        if ($current_page < 1) $current_page = 1;
+        if ($current_page > $total_pages) $current_page = $total_pages;
+
+        // Lấy danh sách sản phẩm đã lọc và phân trang
+        $products = $product->getFiltered($category_id, $min_price, $max_price, $search, $sort, $items_per_page, $offset);
 
         // Lấy danh mục
         require_once 'models/Category.php';

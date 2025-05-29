@@ -237,9 +237,24 @@ class AdminController {
 
     // Quản lý sản phẩm
     public function products() {
+        // Thêm logic phân trang
+        $items_per_page = 6; // Số sản phẩm mỗi trang
+        $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($current_page - 1) * $items_per_page;
+
         require_once 'models/Product.php';
         $product = new Product($this->db);
-        $stmt = $product->getAll();
+
+        // Lấy tổng số sản phẩm để tính số trang
+        $total_items = $product->getTotalFiltered();
+        $total_pages = ceil($total_items / $items_per_page);
+        
+        // Đảm bảo current_page hợp lệ
+        if ($current_page < 1) $current_page = 1;
+        if ($current_page > $total_pages) $current_page = $total_pages;
+
+        // Lấy danh sách sản phẩm có phân trang
+        $products = $product->getFiltered(null, null, null, null, null, $items_per_page, $offset);
 
         require_once 'views/admin/products/index.php';
     }
@@ -365,9 +380,25 @@ class AdminController {
 
     // Quản lý đơn hàng
     public function orders() {
+        // Thêm logic phân trang và lọc
+        $items_per_page = 7; // Số đơn hàng mỗi trang
+        $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $status = isset($_GET['status']) ? $_GET['status'] : null;
+        $offset = ($current_page - 1) * $items_per_page;
+
         require_once 'models/Order.php';
         $order = new Order($this->db);
-        $stmt = $order->getAll();
+
+        // Lấy tổng số đơn hàng để tính số trang
+        $total_items = $order->getTotalFiltered($status);
+        $total_pages = ceil($total_items / $items_per_page);
+        
+        // Đảm bảo current_page hợp lệ
+        if ($current_page < 1) $current_page = 1;
+        if ($current_page > $total_pages) $current_page = $total_pages;
+
+        // Lấy danh sách đơn hàng có phân trang và lọc
+        $orders = $order->getFiltered($status, $items_per_page, $offset);
 
         require_once 'views/admin/orders/index.php';
     }

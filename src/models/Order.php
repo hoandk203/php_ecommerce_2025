@@ -174,5 +174,70 @@ class Order {
         
         return $stmt;
     }
+
+    // Lấy tất cả đơn hàng có phân trang và lọc
+    public function getFiltered($status = null, $limit = null, $offset = null) {
+        $query = "SELECT o.*, u.name, u.email 
+                FROM orders o
+                LEFT JOIN users u ON o.user_id = u.id
+                WHERE 1=1";
+        
+        $params = array();
+
+        // Lọc theo trạng thái
+        if ($status) {
+            $query .= " AND o.status = ?";
+            $params[] = $status;
+        }
+
+        $query .= " ORDER BY o.created_at DESC";
+
+        // Phân trang
+        if ($limit !== null) {
+            $query .= " LIMIT ?";
+            $params[] = $limit;
+        }
+        if ($offset !== null) {
+            $query .= " OFFSET ?";
+            $params[] = $offset;
+        }
+
+        $stmt = $this->conn->prepare($query);
+        
+        // Bind các tham số
+        foreach ($params as $i => $param) {
+            $stmt->bindValue($i + 1, $param);
+        }
+        
+        $stmt->execute();
+        return $stmt;
+    }
+
+    // Lấy tổng số đơn hàng theo điều kiện lọc
+    public function getTotalFiltered($status = null) {
+        $query = "SELECT COUNT(*) as total 
+                FROM orders o
+                LEFT JOIN users u ON o.user_id = u.id
+                WHERE 1=1";
+        
+        $params = array();
+
+        // Lọc theo trạng thái
+        if ($status) {
+            $query .= " AND o.status = ?";
+            $params[] = $status;
+        }
+
+        $stmt = $this->conn->prepare($query);
+        
+        // Bind các tham số
+        foreach ($params as $i => $param) {
+            $stmt->bindValue($i + 1, $param);
+        }
+        
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)$row['total'];
+    }
 }
 ?>

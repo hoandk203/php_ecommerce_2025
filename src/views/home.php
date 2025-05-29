@@ -15,7 +15,7 @@
                                             elseif($category['name']=="Máy tính bảng") echo "<i class='fa-solid fa-tablet-screen-button'></i> ";
                                             elseif($category['name']=="Phụ kiện") echo "<i class='fa-solid fa-diagram-successor'></i> ";
                                             elseif($category['name']=="Tivi") echo "<i class='fa-solid fa-tv'></i> ";
-                                            elseif($category['name']=="Máy tính để bàn") echo "<i class='fa-solid fa-desktop'></i> ";?>
+                                            elseif($category['name']=="Máy tính bàn") echo "<i class='fa-solid fa-desktop'></i> ";?>
 
                                             <?php echo $category['name']; ?></a><i class="fa-solid fa-chevron-right d-flex align-items-center"></i></li>
                                 <?php endforeach; ?>
@@ -68,7 +68,7 @@
         </div>
     </div>
 
-    <div class="row mb-4">
+    <div class="row" style="margin-bottom: 80px;">
         <div class="col-md-12">
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
                 <?php
@@ -86,6 +86,49 @@
                         </div>
                     <?php } ?>
                 <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 80px;">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Sản phẩm gần đây</h2>
+                <a href="/products" class="btn btn-outline-primary">Xem tất cả</a>
+            </div>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4">
+                <?php
+                $count = 0;
+                while ($product = $featured_products->fetch(PDO::FETCH_ASSOC)):
+                    $count++;
+                    if ($count > 10) break;
+                    ?>
+                    <div class="col">
+                        <div class="card h-100 product-card shadow-sm" style="border-radius: 16px;">
+                            <img style="border-top-left-radius: 16px; border-top-right-radius: 16px;" src="<?php echo !empty($product['image']) ? $product['image'] : 'https://via.placeholder.com/300x200?text=No+Image'; ?>" class="card-img-top" alt="<?php echo $product['name']; ?>">
+                            <div class="card-body position-relative shadow" style="padding-bottom: 54px; border-radius: 16px;">
+                                <?php if (!empty($product['discount']) && $product['discount'] > 0): ?>
+                                    <div class="position-absolute start-0 bg-danger text-white py-1 px-2" style="top: -150px;border-radius: 0 0 8px 0; transform: translateY(-100%);">
+                                        -<?php echo $product['discount']; ?>%
+                                    </div>
+                                <?php endif; ?>
+                                <h5 class="card-title" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"><?php echo $product['name']; ?></h5>
+                                <p class="card-text text-truncate"><?php echo $product['description']; ?></p>
+                                <p class="card-text text-danger fw-bold"><?php echo number_format($product['price'], 0, ',', '.'); ?> VND</p>
+                                <div class="d-flex justify-content-between position-absolute bottom-0 start-0 end-0 p-3">
+                                    <a href="/products/detail?id=<?php echo $product['id']; ?>" class="btn" style="background-color: #fb5858; color: white">Chi tiết</a>
+                                    <form method="POST" action="/cart/add">
+                                        <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-outline-success">
+                                            <i class="fas fa-cart-plus"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
             </div>
         </div>
     </div>
@@ -112,7 +155,7 @@
                                                                    -<?php echo $product['discount']; ?>%
                                                                </div>
                                                            <?php endif; ?>
-                                                           <h5 class="card-title"><?php echo $product['name']; ?></h5>
+                                                           <h5 class="card-title" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"><?php echo $product['name']; ?></h5>
                                                            <p class="card-text text-truncate"><?php echo $product['description']; ?></p>
                                                            <p class="card-text text-danger fw-bold"><?php echo number_format($product['price'], 0, ',', '.'); ?> VND</p>
                                                            <div class="d-flex justify-content-between position-absolute bottom-0 start-0 end-0 p-3">

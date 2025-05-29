@@ -14,6 +14,22 @@
         color: #fff !important;
     }
 
+    .pagination .page-item.active .page-link {
+        background-color: #fb5858;
+        border-color: #fb5858;
+        color: #fff;
+    }
+    
+    .pagination .page-link {
+        color: #fb5858;
+        
+    }
+    
+    .pagination .page-link:hover {
+        color: #fff;
+        background-color: #fb5858;
+        border-color: #fb5858;
+    }
 </style>
     <div class="row">
         <div class="col-md-3">
@@ -132,7 +148,7 @@
                                     <div class="card h-100 product-card shadow-sm">
                                         <img src="<?php echo !empty($product['image']) ? $product['image'] : 'https://via.placeholder.com/300x200?text=No+Image'; ?>" class="card-img-top" alt="<?php echo $product['name']; ?>">
                                         <div class="card-body">
-                                            <h5 class="card-title"><?php echo $product['name']; ?></h5>
+                                            <h5 class="card-title" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"><?php echo $product['name']; ?></h5>
                                             <p class="card-text text-truncate"><?php echo $product['description']; ?></p>
                                             <p class="card-text text-danger fw-bold"><?php echo number_format($product['price'], 0, ',', '.'); ?> VND</p>
                                             <div class="d-flex justify-content-between">
@@ -150,6 +166,49 @@
                                 </div>
                             <?php endwhile; ?>
                         </div>
+                        
+                        <!-- Phân trang -->
+                        <?php if ($total_pages > 1): ?>
+                        <div class="d-flex justify-content-center mt-4">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <?php if ($current_page > 1): ?>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?<?php 
+                                                $params = $_GET;
+                                                $params['page'] = $current_page - 1;
+                                                echo http_build_query($params);
+                                            ?>" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+
+                                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                        <li class="page-item <?php echo $i == $current_page ? 'active' : ''; ?>">
+                                            <a class="page-link" href="?<?php 
+                                                $params = $_GET;
+                                                $params['page'] = $i;
+                                                echo http_build_query($params);
+                                            ?>"><?php echo $i; ?></a>
+                                        </li>
+                                    <?php endfor; ?>
+
+                                    <?php if ($current_page < $total_pages): ?>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?<?php 
+                                                $params = $_GET;
+                                                $params['page'] = $current_page + 1;
+                                                echo http_build_query($params);
+                                            ?>" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                </ul>
+                            </nav>
+                        </div>
+                        <?php endif; ?>
                     <?php else: ?>
                         <div class="alert alert-info">
                             Không tìm thấy sản phẩm nào.

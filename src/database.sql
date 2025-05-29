@@ -81,7 +81,9 @@ INSERT INTO categories (name, description) VALUES
                                                ('Điện thoại', 'Các loại điện thoại di động'),
                                                ('Laptop', 'Các loại máy tính xách tay'),
                                                ('Máy tính bảng', 'Các loại máy tính bảng'),
-                                               ('Phụ kiện', 'Các loại phụ kiện điện tử')
+                                               ('Phụ kiện', 'Các loại phụ kiện điện tử'),
+                                               ('Máy tính bàn', 'Các loại máy tính bàn'),
+                                               ('Màn hình', 'Các loại màn hình')
     ON CONFLICT DO NOTHING;
 
 -- Tạo một số sản phẩm mẫu
