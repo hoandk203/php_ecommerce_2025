@@ -86,13 +86,51 @@
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     z-index: 999;
     color: #fff;
+    transition: transform 0.3s ease;
+}
+
+.zalo-toggle {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: #0068ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 999;
+    color: #fff;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.zalo-toggle:hover {
+    transform: scale(1.1);
+}
+
+.zalo-toggle img {
+    width: 35px;
+    height: 35px;
 }
 
 .chatbot-toggle i {
     color: white;
     font-size: 24px;
 }
+
+.chatbot-toggle:hover{
+    transform: scale(1.1);
+}
 </style>
+
+<!-- Nút Zalo -->
+<a href="https://zalo.me/0842500199" target="_blank" class="zalo-toggle" title="Chat với chúng tôi qua Zalo">
+    <img src="/assets/image/zalo-icon.png" alt="Zalo">
+</a>
 
 <!-- Nút mở chatbot -->
 <div class="chatbot-toggle" onclick="toggleChatbot()">
